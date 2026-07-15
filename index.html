@@ -429,6 +429,49 @@
     border-radius: 50%;
     background: var(--item-color, var(--neon-green));
   }
+
+  .marker-item-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .marker-item:hover .marker-item-actions {
+    opacity: 1;
+  }
+  .marker-action-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .marker-action-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+  .marker-action-btn.edit:hover {
+    color: var(--neon-green);
+    border-color: rgba(0,255,136,0.3);
+    background: rgba(0,255,136,0.08);
+  }
+  .marker-action-btn.delete:hover {
+    color: var(--sunset-pink);
+    border-color: rgba(255,45,111,0.3);
+    background: rgba(255,45,111,0.08);
+  }
+  .marker-action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
   
   .empty-state {
     padding: 50px 20px;
@@ -717,7 +760,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 16px;
     letter-spacing: 0.05em;
-    min-width: 50px;
+    min-width: 70px;
   }
   
   .map-info {
@@ -945,7 +988,117 @@
     min-height: 70px;
     font-family: inherit;
   }
+
+  /* Rich Text Editor */
+  .rich-toolbar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .rich-btn {
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rich-btn:hover {
+    background: rgba(0,255,136,0.08);
+    color: var(--neon-green);
+    border-color: rgba(0,255,136,0.3);
+  }
+  .rich-editor {
+    min-height: 70px;
+    white-space: pre-wrap;
+    cursor: text;
+  }
+
+  /* Tags / Chips reusable */
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+    min-height: 10px;
+  }
   
+  /* Tag List (Edit/Hide/Delete) */
+  .tags-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .tags-list::-webkit-scrollbar { width: 4px; }
+  .tags-list::-webkit-scrollbar-track { background: transparent; }
+  .tags-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .tag-list-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 8px;
+    transition: all 0.2s;
+  }
+  .tag-list-item.selected {
+    border-color: var(--neon-green);
+    background: rgba(0,255,136,0.08);
+  }
+  .tag-list-item.hidden-tag .tag-name {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  .tag-name {
+    flex: 1;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .tag-icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+  }
+  .tag-icon-btn:hover { color: var(--text); }
+  .tag-icon-btn.delete:hover { color: var(--sunset-pink); }
+  .tag-icon-btn.edit:hover { color: var(--neon-cyan); }
+  .tag-icon-btn.hide:hover { color: var(--neon-yellow); }
+
+  .add-tag-row {
+    display: flex;
+    gap: 8px;
+  }
+  .add-tag-btn {
+    flex: 0;
+    padding: 0 16px;
+    font-size: 18px;
+    line-height: 1;
+  }
+
   /* Range Slider */
   .form-range {
     -webkit-appearance: none;
@@ -1155,6 +1308,13 @@
     margin-top: 8px;
   }
   
+  .image-actions-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+  
   .btn-small {
     flex: 1;
     padding: 9px;
@@ -1270,13 +1430,14 @@
     position: absolute;
     background: var(--bg-panel-solid);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 8px; 
     box-shadow: 0 12px 40px rgba(0,0,0,0.8);
-    width: 260px;
+    width: 320px; 
     z-index: 100;
     pointer-events: auto;
     overflow: hidden;
     animation: popupIn 0.2s ease;
+    cursor: move;
   }
   
   @keyframes popupIn {
@@ -1286,33 +1447,36 @@
   
   .popup-image {
     width: 100%;
-    height: 130px;
+    height: 160px; 
     object-fit: cover;
     display: block;
     border-bottom: 1px solid var(--border);
+    pointer-events: none;
   }
   
   .popup-image-placeholder {
     width: 100%;
-    height: 80px;
+    height: 100px; 
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--cat-color);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
+    font-size: 48px; 
     border-bottom: 1px solid var(--border);
+    pointer-events: none;
   }
   
   .popup-body {
-    padding: 12px 14px;
+    padding: 16px 18px; 
+    pointer-events: none;
   }
   
   .popup-category {
-    font-size: 9px;
+    font-size: 11px; 
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     color: var(--cat-color);
     font-weight: 700;
     display: flex;
@@ -1322,8 +1486,8 @@
   
   .popup-category::before {
     content: '';
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: currentColor;
     box-shadow: 0 0 6px currentColor;
@@ -1331,66 +1495,73 @@
   
   .popup-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
+    font-size: 28px; 
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 12px; 
     color: var(--text);
+  }
+
+  .popup-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    margin-bottom: 10px; 
+    font-size: 14px; 
+    flex-wrap: wrap;
+  }
+  .popup-info-label {
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px; 
+    letter-spacing: 0.1em;
+  }
+  .popup-info-value {
+    color: var(--text-dim);
+    font-weight: 500;
+    font-size: 14px; 
+  }
+
+  .popup-tags-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; 
+  }
+  .popup-tag {
+    font-size: 11px; 
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    color: var(--neon-cyan);
+    padding: 4px 8px; 
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .popup-tag.location-tag {
+    color: var(--neon-green);
+    border-color: rgba(0, 255, 136, 0.3);
+    background: rgba(0, 255, 136, 0.1);
   }
   
   .popup-description {
-    font-size: 12px;
+    font-size: 14px; 
     color: var(--text-dim);
     line-height: 1.5;
-    margin-bottom: 10px;
+    margin-top: 12px;
+    margin-bottom: 12px;
   }
   
   .popup-coords {
-    font-size: 10px;
+    font-size: 12px; 
     color: var(--text-muted);
     font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 0.1em;
-    margin-bottom: 10px;
-    padding: 6px 8px;
+    margin-top: 12px;
+    padding: 8px 10px; 
     background: rgba(255,255,255,0.03);
-    border-radius: 3px;
+    border-radius: 4px;
   }
-  
-  .popup-actions {
-    display: flex;
-    gap: 6px;
-  }
-  
-  .popup-btn {
-    flex: 1;
-    padding: 8px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 3px;
-    font-size: 10px;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    transition: all 0.2s;
-    font-family: inherit;
-    font-weight: 600;
-  }
-  
-  .popup-btn:hover { background: rgba(255,255,255,0.08); }
-  
-  .popup-btn.edit {
-    color: var(--neon-green);
-    border-color: rgba(0,255,136,0.3);
-  }
-  
-  .popup-btn.edit:hover { background: rgba(0,255,136,0.08); }
-  
-  .popup-btn.delete {
-    color: var(--sunset-pink);
-    border-color: rgba(255,45,111,0.3);
-  }
-  
-  .popup-btn.delete:hover { background: rgba(255,45,111,0.08); }
   
   .sidebar-footer {
     padding: 12px 16px;
@@ -1491,7 +1662,7 @@
     color: var(--text);
   }
   
-  /* Camera Modal */
+  /* Camera & Image Editor Modal */
   .camera-view {
     width: 100%;
     background: #000;
@@ -1511,11 +1682,59 @@
     transform: scaleX(-1);
   }
   
+  .editor-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto 16px;
+    aspect-ratio: 1;
+  }
+  
   .editor-canvas {
     width: 100%;
+    height: 100%;
     border-radius: 6px;
     display: block;
     background: #000;
+    border: 2px solid var(--border);
+    cursor: move;
+  }
+
+  /* Popup Preview inside Image Editor */
+  .popup-preview-card {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 180px; 
+    background: var(--bg-panel-solid);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    pointer-events: none;
+    z-index: 10;
+  }
+  .popup-preview-card .popup-image {
+    height: 80px;
+  }
+  .popup-preview-card .popup-body {
+    padding: 10px 12px;
+  }
+  .popup-preview-card .popup-title {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .popup-preview-card .popup-info-row {
+    font-size: 11px;
+    margin-bottom: 4px;
+    gap: 4px;
+  }
+  .popup-preview-card .popup-info-label {
+    font-size: 8px;
+  }
+  .popup-preview-card .popup-tag {
+    font-size: 8px;
+    padding: 2px 4px;
   }
   
   /* Screenshot Overlay */
@@ -1666,9 +1885,14 @@
   
   <main class="map-area" id="mapArea">
     <div class="map-wrapper" id="mapWrapper">
+      <svg id="popupLines" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99;">
+        <line id="popupConnector" x1="0" y1="0" x2="0" y2="0" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+      </svg>
+      
       <div class="map-canvas" id="mapCanvas">
         <img class="map-image" id="mapImage" alt="Mapa GPS ARES" style="display:none;" />
         <div class="map-grid-overlay"></div>
+        <svg id="trailLayer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1;"></svg>
         <div class="markers-layer" id="markersLayer"></div>
       </div>
     </div>
@@ -1712,11 +1936,11 @@
     
     <div class="coords-display">
       <div class="coord-item">
-        <span class="coord-label">X</span>
+        <span class="coord-label">LAT</span>
         <span class="coord-value" id="coordX">---</span>
       </div>
       <div class="coord-item">
-        <span class="coord-label">Y</span>
+        <span class="coord-label">LNG</span>
         <span class="coord-value" id="coordY">---</span>
       </div>
     </div>
@@ -1746,10 +1970,33 @@
         <label class="form-label">Nombre del marcador</label>
         <input type="text" class="form-input" id="nameInput" placeholder="Ej: Sujeto 1, Vehículo A..." maxlength="60">
       </div>
+
+      <div class="form-group">
+        <label class="form-label">Nombre del dueño/a</label>
+        <input type="text" class="form-input" id="ownerInput" placeholder="Ej: Nicolle Santos" maxlength="60">
+      </div>
       
       <div class="form-group">
         <label class="form-label">Estado del GPS</label>
         <div class="status-selector" id="statusSelector"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Estado del perro (Escribe y presiona Enter)</label>
+        <div class="add-tag-row">
+          <input type="text" class="form-input" id="newDogStateInput" placeholder="Añadir estado (Ej: Jugando)..." style="flex: 1;">
+          <button type="button" class="btn-small primary add-tag-btn" id="btnAddDogState">+</button>
+        </div>
+        <div id="dogStatesList" class="tags-list"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Ubicaciones / Zonas (Escribe y presiona Enter)</label>
+        <div class="add-tag-row">
+          <input type="text" class="form-input" id="newLocationInput" placeholder="Añadir ubicación..." style="flex: 1;">
+          <button type="button" class="btn-small primary add-tag-btn" id="btnAddLocation">+</button>
+        </div>
+        <div id="locationsList" class="tags-list"></div>
       </div>
 
       <div class="form-group">
@@ -1770,13 +2017,18 @@
       
       <div class="form-group">
         <label class="form-label">Descripción (opcional)</label>
-        <textarea class="form-textarea" id="descInput" placeholder="Notas, detalles, instrucciones..." maxlength="500"></textarea>
+        <div class="rich-toolbar">
+          <button type="button" class="rich-btn" id="btnBold" title="Negrita"><b>B</b></button>
+          <button type="button" class="rich-btn" id="btnItalic" title="Cursiva"><i>I</i></button>
+          <button type="button" class="rich-btn" id="btnUnderline" title="Subrayado"><u>U</u></button>
+        </div>
+        <div id="descInput" class="form-input rich-editor" contenteditable="true"></div>
       </div>
       
       <div class="form-group">
         <label class="form-label">
           Imagen personalizada del marcador
-          <span class="form-label-hint">ALTA RESOLUCIÓN</span>
+          <span class="form-label-hint">EDITABLE</span>
         </label>
         <div class="image-upload-area" id="uploadArea">
           <input type="file" id="imageInput" accept="image/*" style="display:none">
@@ -1787,7 +2039,7 @@
               <polyline points="21 15 16 10 5 21"/>
             </svg>
             <div class="upload-text"><strong>Haz clic</strong> o arrastra una imagen aquí</div>
-            <div class="upload-hint">La imagen se ajustará al tamaño del marcador · JPG, PNG, GIF · Máx 5MB</div>
+            <div class="upload-hint">Podrás recortar y ajustar la imagen antes de guardar · Máx 5MB</div>
           </div>
           <img class="image-preview" id="imagePreview" style="display:none" alt="Preview">
           <div class="image-overlay" id="imageOverlay">
@@ -1796,7 +2048,7 @@
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
               </svg>
-              Cambiar imagen
+              Editar Imagen
             </span>
           </div>
           <div class="image-badge" id="imageBadge" style="display:none">
@@ -1818,6 +2070,18 @@
           <button class="btn-small danger" id="btnRemoveImage">Quitar</button>
         </div>
       </div>
+
+      <div class="form-group" id="trailGroup" style="display:none; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;">
+        <label class="form-label">Registro de movimiento</label>
+        <button class="btn-small danger" id="btnClearTrail" style="width: 100%; padding: 12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          Limpiar Rastro (Huellas)
+        </button>
+      </div>
+      
     </div>
     
     <div class="modal-footer">
@@ -1828,12 +2092,12 @@
   </div>
 </div>
 
-<!-- MODAL CÁMARA -->
+<!-- MODAL EDITOR DE IMAGEN Y CÁMARA -->
 <div class="modal-backdrop" id="cameraBackdrop">
   <div class="modal" style="width: 500px;" role="dialog">
     <div class="modal-header">
-      <h2 class="modal-title">CAPTURAR FOTO</h2>
-      <div class="modal-subtitle">Usa tu cámara y edita la imagen</div>
+      <h2 class="modal-title" id="cameraModalTitle">EDITAR IMAGEN</h2>
+      <div class="modal-subtitle" id="cameraModalSubtitle">Arrastra para mover la imagen</div>
     </div>
     
     <div class="modal-body">
@@ -1842,9 +2106,67 @@
       </div>
       
       <div id="editorView" style="display:none;">
-        <canvas id="editorCanvas" class="editor-canvas"></canvas>
+        <div class="editor-canvas-wrapper">
+          <canvas id="editorCanvas" class="editor-canvas" width="400" height="400"></canvas>
+          
+          <div class="popup-preview-card">
+            <div class="popup-image" id="prevImg" style="background-size: cover; background-position: center; background-color: #333;"></div>
+            <div class="popup-body">
+              <div class="popup-title" style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; margin-bottom: 6px; color: white;">VISTA PREVIA</div>
+              <div class="popup-info-row">
+                <span class="popup-info-label">Dueño/a:</span>
+                <span class="popup-info-value" style="font-size: 11px; color: #a89bb5;">Nicolle Santos</span>
+              </div>
+              <div class="popup-info-row">
+                <span class="popup-info-label">Ubicación:</span>
+                <span class="popup-tag location-tag" style="font-size: 8px; padding: 2px 4px;">Parque</span>
+              </div>
+              <div class="popup-info-row">
+                <span class="popup-info-label">Estado:</span>
+                <span class="popup-tag" style="font-size: 8px; padding: 2px 4px;">Feliz</span>
+              </div>
+            </div>
+          </div>
+        </div>
         
+        <div class="image-actions-4">
+          <button class="btn-small" id="btnRotLeft" title="Rotar Izquierda">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            Izq
+          </button>
+          <button class="btn-small" id="btnRotRight" title="Rotar Derecha">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Der
+          </button>
+          <button class="btn-small" id="btnFlipH" title="Voltear Horizontal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/>
+            </svg>
+            Voltear
+          </button>
+          <button class="btn-small" id="btnFlipV" title="Voltear Vertical">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18M12 3l-4 4M12 3l4 4M12 21l-4-4M12 21l4-4"/>
+            </svg>
+            Invertir
+          </button>
+        </div>
+
         <div class="form-group" style="margin-top: 16px;">
+          <label class="form-label">
+            Zoom
+            <span class="form-label-hint"><span id="zoomVal">100</span>%</span>
+          </label>
+          <input type="range" class="form-range" id="editZoom" min="50" max="300" value="100">
+        </div>
+        
+        <div class="form-group">
           <label class="form-label">
             Brillo
             <span class="form-label-hint"><span id="brightVal">100</span>%</span>
@@ -1869,7 +2191,7 @@
         </div>
         
         <div class="image-actions">
-          <button class="btn-small" id="btnRetake">
+          <button class="btn-small" id="btnRetake" style="display:none;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
               <circle cx="12" cy="13" r="4"/>
@@ -1881,7 +2203,7 @@
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
             </svg>
-            Copiar al portapapeles
+            Copiar
           </button>
         </div>
       </div>
@@ -1890,7 +2212,7 @@
     <div class="modal-footer">
       <button class="btn-cancel" id="btnCancelCamera">Cancelar</button>
       <button class="btn-save" id="btnCapture" style="display:none;">Tomar Foto</button>
-      <button class="btn-save" id="btnUsePhoto" style="display:none;">Usar en Marcador</button>
+      <button class="btn-save" id="btnUsePhoto" style="display:none;">Aplicar Imagen</button>
     </div>
   </div>
 </div>
@@ -1923,8 +2245,9 @@
 <script>
 // ============ CONFIGURACIÓN ============
 const STORAGE_KEY = 'gps-ares-markers-v1';
+const LOCATIONS_KEY = 'gps-ares-locations-v1';
+const DOG_STATES_KEY = 'gps-ares-dog-states-v1';
 
-// Mapa por defecto en ALTA RESOLUCIÓN (8192x8192)
 const DEFAULT_MAP_URL = 'https://www.bragitoff.com/wp-content/uploads/2015/11/GTAV_ATLUS_8192x8192.png';
 const DEFAULT_MAP_W = 8192;
 const DEFAULT_MAP_H = 8192;
@@ -1932,14 +2255,18 @@ const DEFAULT_MAP_H = 8192;
 const STATUSES = [
   { id: 'stationary', label: 'Quieto', color: '#ffd60a', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>' },
   { id: 'moving', label: 'Movimiento', color: '#00ff88', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg>' },
-  { id: 'vehicle', label: 'Vehículo', color: '#00d4ff', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>' },
+  { id: 'vehicle', label: 'Vehículo', color: '#00d4ff', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66,0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>' },
   { id: 'damaged', label: 'Dañado', color: '#ef4444', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>' },
-  { id: 'disconnected', label: 'Desconectado', color: '#6b5d7a', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.77 2.77h-.42C2.99 8.66 1 11.1 1 14c0 3.31 2.69 6 6 6h11.73l2 2L22 20.46 4.54 3 3 5.27z"/></svg>' }
+  { id: 'resting', label: 'Descansando', color: '#8b5cf6', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>' }
 ];
 
 // ============ ESTADO ============
 const state = {
   markers: [],
+  customLocations: [],
+  currentLocations: [], 
+  customDogStates: [],
+  selectedDogStates: [],
   zoom: 0.4,
   panX: 0,
   panY: 0,
@@ -1965,11 +2292,25 @@ const state = {
   markerDragStart: { mouseX: 0, mouseY: 0, markerX: 0, markerY: 0 },
   hideLabels: false,
   cameraStream: null,
-  capturedImage: null,
   mapWidth: DEFAULT_MAP_W,
   mapHeight: DEFAULT_MAP_H,
   isCapturing: false,
-  captureShape: 'circle'
+  captureShape: 'circle',
+  isDraggingPopup: false,
+  popupDragStart: { mouseX: 0, mouseY: 0, popupX: 0, popupY: 0 },
+  activePopupMarkerId: null,
+  editImg: null,
+  editScale: 1,
+  editRotation: 0,
+  editFlipH: 1,
+  editFlipV: 1,
+  editOffsetX: 0,
+  editOffsetY: 0,
+  editBrightness: 100,
+  editContrast: 100,
+  editSaturation: 100,
+  isDraggingEdit: false,
+  editDragStart: { x: 0, y: 0, offsetX: 0, offsetY: 0 }
 };
 
 // ============ DOM ============
@@ -1985,8 +2326,13 @@ const cameraBackdrop = $('cameraBackdrop');
 // ============ INIT ============
 async function init() {
   loadMarkers();
+  loadCustomLocations();
+  loadCustomDogStates();
+  migrateTags();
   renderStatuses();
   renderStatusSelector();
+  renderTagsList('location');
+  renderTagsList('dogState');
   renderMarkerList();
   updateStats();
   initMapEvents();
@@ -2000,7 +2346,6 @@ async function init() {
     updateMapTransform();
   });
   
-  // Cargar mapa al inicio
   try {
     const customMap = await getCustomMap();
     if (customMap) {
@@ -2015,8 +2360,55 @@ async function init() {
   }
   
   setTimeout(() => {
-    showToast('Arrastra los marcadores para moverlos', 'success');
+    showToast('Arrastra los marcadores para crear un rastro', 'success');
   }, 1200);
+}
+
+// ============ MIGRACIÓN DE TAGS VIEJOS ============
+function migrateTags() {
+  let changed = false;
+  // Migrar ubicaciones personalizadas
+  state.customLocations.forEach((item, idx) => {
+    if (typeof item === 'string') {
+      state.customLocations[idx] = { id: 'loc_' + Date.now() + '_' + idx, text: item, hidden: false };
+      changed = true;
+    }
+  });
+  // Migrar estados de perro
+  state.customDogStates.forEach((item, idx) => {
+    if (typeof item === 'string') {
+      state.customDogStates[idx] = { id: 'dog_' + Date.now() + '_' + idx, text: item, hidden: false };
+      changed = true;
+    }
+  });
+  // Migrar marcadores
+  state.markers.forEach(m => {
+    if (m.locations && m.locations.length > 0 && typeof m.locations[0] === 'string') {
+      m.locations = m.locations.map(text => {
+        let existing = state.customLocations.find(t => t.text.toLowerCase() === text.toLowerCase());
+        if (existing) return existing.id;
+        const newTag = { id: 'loc_' + Date.now() + Math.random(), text, hidden: false };
+        state.customLocations.push(newTag);
+        return newTag.id;
+      });
+      changed = true;
+    }
+    if (m.dogStates && m.dogStates.length > 0 && typeof m.dogStates[0] === 'string') {
+      m.dogStates = m.dogStates.map(text => {
+        let existing = state.customDogStates.find(t => t.text.toLowerCase() === text.toLowerCase());
+        if (existing) return existing.id;
+        const newTag = { id: 'dog_' + Date.now() + Math.random(), text, hidden: false };
+        state.customDogStates.push(newTag);
+        return newTag.id;
+      });
+      changed = true;
+    }
+  });
+  if (changed) {
+    saveCustomLocations();
+    saveCustomDogStates();
+    saveMarkers();
+  }
 }
 
 // ============ INDEXED DB PARA MAPA ============
@@ -2075,13 +2467,15 @@ function setMapImage(url, w, h) {
   const oldW = state.mapWidth || w;
   const oldH = state.mapHeight || h;
   
-  // Re-escalar marcadores proporcionalmente si el tamaño del mapa cambió
   if (oldW !== w || oldH !== h) {
     const scaleX = w / oldW;
     const scaleY = h / oldH;
     state.markers.forEach(m => {
       m.x = m.x * scaleX;
       m.y = m.y * scaleY;
+      if (m.trail) {
+        m.trail = m.trail.map(p => ({ x: p.x * scaleX, y: p.y * scaleY }));
+      }
     });
     saveMarkers();
   }
@@ -2122,6 +2516,7 @@ function updateMapDimensions() {
   mapImage.style.height = state.mapHeight + 'px';
   markersLayer.style.width = state.mapWidth + 'px';
   markersLayer.style.height = state.mapHeight + 'px';
+  $('trailLayer').setAttribute('viewBox', `0 0 ${state.mapWidth} ${state.mapHeight}`);
 }
 
 function centerMap() {
@@ -2135,10 +2530,21 @@ function centerMap() {
 
 function updateMapTransform() {
   mapCanvas.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.zoom})`;
+  updatePopupConnector();
 }
 
 function updateZoomIndicator() {
   $('zoomIndicator').textContent = Math.round(state.zoom * 100) + '%';
+}
+
+// Conversión de coordenadas de imagen a Lat/Lng simuladas
+function getSimulatedCoords(imgX, imgY) {
+  const w = state.mapWidth || DEFAULT_MAP_W;
+  const h = state.mapHeight || DEFAULT_MAP_H;
+  // Simular coordenadas de Los Santos (Los Ángeles)
+  const lat = (34.50 - (imgY / h) * 1.0).toFixed(6);
+  const lng = (-118.80 + (imgX / w) * 1.0).toFixed(6);
+  return { lat, lng };
 }
 
 function initMapEvents() {
@@ -2151,7 +2557,7 @@ function initMapEvents() {
   let touchDist = null;
   
   mapArea.addEventListener('touchstart', (e) => {
-    if (e.target.closest('.marker')) return;
+    if (e.target.closest('.marker') || e.target.closest('.marker-popup')) return;
     if (e.touches.length === 1) {
       const t = e.touches[0];
       touchStart = { x: t.clientX, y: t.clientY, panX: state.panX, panY: state.panY, time: Date.now() };
@@ -2245,11 +2651,11 @@ function initMapEvents() {
       return;
     }
     
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
     
     if (e.key === '+' || e.key === '=') zoomBy(1.2);
     if (e.key === '-') zoomBy(1/1.2);
-    if (e.key === '0') centerMap();
+    if (e.key === '0') centerMap;
     if (e.key === 'n' || e.key === 'N') startAddingMode();
     if (e.key === 'h' || e.key === 'H') $('btnToggleLabels').click();
     if (e.key === 'Escape') {
@@ -2277,7 +2683,21 @@ function zoomBy(factor) {
 
 function handleMouseDown(e) {
   if (e.button !== 0) return;
-  if (e.target.closest('.marker') || e.target.closest('.marker-popup') || e.target.closest('.zoom-controls') || e.target.closest('.toggle-labels-btn')) return;
+  
+  if (e.target.closest('.marker-popup')) {
+    state.isDraggingPopup = true;
+    const popup = $('markerPopup');
+    state.popupDragStart = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      popupX: popup.offsetLeft,
+      popupY: popup.offsetTop
+    };
+    e.preventDefault();
+    return;
+  }
+
+  if (e.target.closest('.marker') || e.target.closest('.zoom-controls') || e.target.closest('.toggle-labels-btn')) return;
   
   state.isDragging = true;
   state.hasDragged = false;
@@ -2298,15 +2718,25 @@ function handleMouseMove(e) {
     const imgY = (mouseY - state.panY) / state.zoom;
     
     if (imgX >= 0 && imgX <= state.mapWidth && imgY >= 0 && imgY <= state.mapHeight) {
-      $('coordX').textContent = Math.round(imgX);
-      $('coordY').textContent = Math.round(imgY);
+      const coords = getSimulatedCoords(imgX, imgY);
+      $('coordX').textContent = coords.lat;
+      $('coordY').textContent = coords.lng;
     } else {
       $('coordX').textContent = '---';
       $('coordY').textContent = '---';
     }
   }
   
-  if (state.isDraggingMarker && state.draggedMarker) {
+  if (state.isDraggingPopup) {
+    const dx = e.clientX - state.popupDragStart.mouseX;
+    const dy = e.clientY - state.popupDragStart.mouseY;
+    const popup = $('markerPopup');
+    if (popup) {
+      popup.style.left = (state.popupDragStart.popupX + dx) + 'px';
+      popup.style.top = (state.popupDragStart.popupY + dy) + 'px';
+      updatePopupConnector();
+    }
+  } else if (state.isDraggingMarker && state.draggedMarker) {
     const dx = e.clientX - state.markerDragStart.mouseX;
     const dy = e.clientY - state.markerDragStart.mouseY;
     
@@ -2331,8 +2761,20 @@ function handleMouseMove(e) {
         el.classList.add('dragging');
       }
       
-      $('coordX').textContent = Math.round(newX);
-      $('coordY').textContent = Math.round(newY);
+      const coords = getSimulatedCoords(newX, newY);
+      $('coordX').textContent = coords.lat;
+      $('coordY').textContent = coords.lng;
+
+      state.draggedMarker.trail = state.draggedMarker.trail || [];
+      const lastPoint = state.draggedMarker.trail[state.draggedMarker.trail.length - 1];
+      const dist = Math.hypot(newX - (lastPoint ? lastPoint.x : state.markerDragStart.markerX), newY - (lastPoint ? lastPoint.y : state.markerDragStart.markerY));
+      if (!lastPoint && dist > 0) {
+        state.draggedMarker.trail.push({ x: state.markerDragStart.markerX, y: state.markerDragStart.markerY });
+        renderTrails();
+      } else if (lastPoint && dist > 18) {
+        state.draggedMarker.trail.push({ x: newX, y: newY });
+        renderTrails();
+      }
     }
   } else if (state.isDragging) {
     const dx = e.clientX - state.dragStart.x;
@@ -2349,12 +2791,15 @@ function handleMouseMove(e) {
 }
 
 function handleMouseUp(e) {
-  if (state.isDraggingMarker) {
+  if (state.isDraggingPopup) {
+    state.isDraggingPopup = false;
+  } else if (state.isDraggingMarker) {
     if (state.markerDragStarted) {
       saveMarkers();
       const el = markersLayer.querySelector(`.marker[data-id="${state.draggedMarker.id}"]`);
       if (el) el.classList.remove('dragging');
-      showToast(`Marcador movido a X: ${Math.round(state.draggedMarker.x)}, Y: ${Math.round(state.draggedMarker.y)}`);
+      const coords = getSimulatedCoords(state.draggedMarker.x, state.draggedMarker.y);
+      showToast(`Marcador movido a Lat: ${coords.lat}, Lng: ${coords.lng}`);
     } else {
       selectMarker(state.draggedMarker.id);
     }
@@ -2362,6 +2807,7 @@ function handleMouseUp(e) {
     state.isDraggingMarker = false;
     state.draggedMarker = null;
     state.markerDragStarted = false;
+    renderMarkers();
   } else if (state.isDragging) {
     if (!state.hasDragged) {
       handleMapClick(e);
@@ -2435,7 +2881,6 @@ function handleMapUpload(e) {
       let height = img.naturalHeight;
       let dataUrl = ev.target.result;
       
-      // Si la imagen es enorme, la redimensionamos para no romper el navegador
       if (width > maxDim || height > maxDim) {
         const canvas = document.createElement('canvas');
         const scale = maxDim / Math.max(width, height);
@@ -2466,7 +2911,7 @@ function handleMapUpload(e) {
   e.target.value = '';
 }
 
-// ============ MARCADORES ============
+// ============ MARCADORES, UBICACIONES Y ESTADOS ============
 function loadMarkers() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -2486,6 +2931,52 @@ function saveMarkers() {
   }
 }
 
+function loadCustomLocations() {
+  try {
+    const saved = localStorage.getItem(LOCATIONS_KEY);
+    if (saved) {
+      state.customLocations = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Error cargando ubicaciones:', e);
+  }
+}
+
+function saveCustomLocations() {
+  try {
+    localStorage.setItem(LOCATIONS_KEY, JSON.stringify(state.customLocations));
+  } catch (e) {
+    console.error('Error guardando ubicaciones:', e);
+  }
+}
+
+function loadCustomDogStates() {
+  try {
+    const saved = localStorage.getItem(DOG_STATES_KEY);
+    if (saved) {
+      state.customDogStates = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Error cargando estados de perro:', e);
+  }
+}
+
+function saveCustomDogStates() {
+  try {
+    localStorage.setItem(DOG_STATES_KEY, JSON.stringify(state.customDogStates));
+  } catch (e) {
+    console.error('Error guardando estados de perro:', e);
+  }
+}
+
+function getTagTexts(ids, type) {
+  const arr = type === 'location' ? state.customLocations : state.customDogStates;
+  return ids.map(id => {
+    const tag = arr.find(t => t.id === id);
+    return tag && !tag.hidden ? tag.text : null;
+  }).filter(t => t !== null);
+}
+
 function renderMarkers() {
   markersLayer.innerHTML = '';
   
@@ -2493,8 +2984,13 @@ function renderMarkers() {
     if (state.filterStatus !== 'all' && marker.status !== state.filterStatus) return false;
     if (state.searchQuery) {
       const q = state.searchQuery.toLowerCase();
+      const locTexts = getTagTexts(marker.locations || [], 'location').join(' ').toLowerCase();
+      const dogTexts = getTagTexts(marker.dogStates || [], 'dogState').join(' ').toLowerCase();
       if (!marker.name.toLowerCase().includes(q) && 
-          !(marker.description || '').toLowerCase().includes(q)) return false;
+          !(marker.description || '').toLowerCase().includes(q) &&
+          !(marker.owner || '').toLowerCase().includes(q) &&
+          !locTexts.includes(q) &&
+          !dogTexts.includes(q)) return false;
     }
     return true;
   });
@@ -2569,25 +3065,68 @@ function renderMarkers() {
   });
   
   $('statVisible').textContent = visibleMarkers.length;
+  renderTrails();
+}
+
+function renderTrails() {
+  const trailLayer = $('trailLayer');
+  trailLayer.innerHTML = '';
+  
+  const visibleMarkers = state.markers.filter(marker => {
+    if (state.filterStatus !== 'all' && marker.status !== state.filterStatus) return false;
+    if (state.searchQuery) {
+      const q = state.searchQuery.toLowerCase();
+      const locTexts = getTagTexts(marker.locations || [], 'location').join(' ').toLowerCase();
+      const dogTexts = getTagTexts(marker.dogStates || [], 'dogState').join(' ').toLowerCase();
+      if (!marker.name.toLowerCase().includes(q) && 
+          !(marker.description || '').toLowerCase().includes(q) &&
+          !(marker.owner || '').toLowerCase().includes(q) &&
+          !locTexts.includes(q) &&
+          !dogTexts.includes(q)) return false;
+    }
+    return true;
+  });
+
+  visibleMarkers.forEach(marker => {
+    if (marker.trail && marker.trail.length > 0) {
+      const status = STATUSES.find(s => s.id === marker.status) || STATUSES[0];
+      const color = marker.color || status.color;
+      const points = [...marker.trail, { x: marker.x, y: marker.y }];
+      
+      for(let i = 0; i < points.length - 1; i++) {
+        const p1 = points[i];
+        const p2 = points[i+1];
+        const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI + 90;
+        drawPaw(trailLayer, p1.x, p1.y, angle, color);
+      }
+    }
+  });
+}
+
+function drawPaw(svg, x, y, angle, color) {
+  const pawPath = "M4.5,11c0.828,0,1.5-0.895,1.5-2S5.328,7,4.5,7S3,7.895,3,9S3.672,11,4.5,11z M9.5,7C10.328,7,11,6.105,11,5S10.328,3,9.5,3S8,3.895,8,5S8.672,7,9.5,7z M14.5,7C15.328,7,16,6.105,16,5s-0.672-2-1.5-2S13,3.895,13,5S13.672,7,14.5,7z M19.5,11c0.828,0,1.5-0.895,1.5-2s-0.672-2-1.5-2S18,7.895,18,9S18.672,11,19.5,11z M17.75,13.25c-1.381,0-2.5,1.119-2.5,2.5c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5c0-0.828,0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5C20.25,14.369,19.131,13.25,17.75,13.25z M6.25,13.25c-1.381,0-2.5,1.119-2.5,2.5c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5c0-0.828,0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5C8.75,14.369,7.631,13.25,6.25,13.25z M12,12c-2.761,0-5,2.239-5,5c0,1.105,0.895,2,2,2h6c1.105,0,2-0.895,2-2C17,14.239,14.761,12,12,12z";
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', pawPath);
+  path.setAttribute('fill', color);
+  path.setAttribute('opacity', '0.6');
+  path.setAttribute('transform', `translate(${x}, ${y}) rotate(${angle}) scale(0.7) translate(-12, -12)`);
+  svg.appendChild(path);
 }
 
 function selectMarker(id) {
   state.selectedMarkerId = id;
   renderMarkers();
   renderMarkerList();
-  
   const marker = state.markers.find(m => m.id === id);
-  if (marker) {
-    showMarkerPopup(marker);
-  }
+  if (marker) showMarkerPopup(marker);
 }
 
 function showMarkerPopup(marker) {
   closePopup();
-  
   const status = STATUSES.find(s => s.id === marker.status) || STATUSES[0];
   const color = marker.color || status.color;
   
+  state.activePopupMarkerId = marker.id;
   const popup = document.createElement('div');
   popup.className = 'marker-popup';
   popup.id = 'markerPopup';
@@ -2598,46 +3137,95 @@ function showMarkerPopup(marker) {
     ? `<img class="popup-image" src="${marker.image}" alt="">`
     : `<div class="popup-image-placeholder" style="background: ${color}1A; color: ${color};">${status.svg}</div>`;
   
+  const locTexts = getTagTexts(marker.locations || [], 'location');
+  const dogTexts = getTagTexts(marker.dogStates || [], 'dogState');
+
+  const locationsHtml = locTexts.length > 0 ? `
+    <div class="popup-info-row">
+      <span class="popup-info-label">Ubicación:</span>
+      <div class="popup-tags-inline">
+        ${locTexts.map(l => `<span class="popup-tag location-tag">${escapeHtml(l)}</span>`).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const dogStatesHtml = dogTexts.length > 0 ? `
+    <div class="popup-info-row">
+      <span class="popup-info-label">Estado del perro:</span>
+      <div class="popup-tags-inline">
+        ${dogTexts.map(s => `<span class="popup-tag">${escapeHtml(s)}</span>`).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const coords = getSimulatedCoords(marker.x, marker.y);
+
   popup.innerHTML = `
     ${imageContent}
     <div class="popup-body">
       <div class="popup-category" style="color: ${color}">${status.label}</div>
       <div class="popup-title">${escapeHtml(marker.name)}</div>
-      ${marker.description ? `<div class="popup-description">${escapeHtml(marker.description)}</div>` : ''}
-      <div class="popup-coords">X: ${Math.round(marker.x)} · Y: ${Math.round(marker.y)}</div>
-      <div class="popup-actions">
-        <button class="popup-btn edit" data-action="edit">Editar</button>
-        <button class="popup-btn delete" data-action="delete">Eliminar</button>
+      <div class="popup-info-row">
+        <span class="popup-info-label">Dueño/a:</span>
+        <span class="popup-info-value">${escapeHtml(marker.owner || 'Nicolle Santos')}</span>
       </div>
+      ${locationsHtml}
+      ${dogStatesHtml}
+      ${marker.description ? `<div class="popup-description">${marker.description}</div>` : ''}
+      <div class="popup-coords">Lat: ${coords.lat} · Lng: ${coords.lng}</div>
     </div>
   `;
   
   const screenX = state.panX + marker.x * state.zoom;
   const screenY = state.panY + marker.y * state.zoom;
   popup.style.left = screenX + 'px';
-  popup.style.top = (screenY - 10) + 'px';
+  popup.style.top = (screenY - 20) + 'px';
   popup.style.transform = 'translate(-50%, -100%)';
   
   mapWrapper.appendChild(popup);
-  
-  popup.querySelector('[data-action="edit"]').addEventListener('click', (e) => {
-    e.stopPropagation();
-    closePopup();
-    openModal(marker);
-  });
-  
-  popup.querySelector('[data-action="delete"]').addEventListener('click', (e) => {
-    e.stopPropagation();
-    closePopup();
-    confirmDelete(marker);
-  });
+  updatePopupConnector();
   
   setTimeout(() => {
     document.addEventListener('mousedown', outsidePopupClick);
   }, 10);
 }
 
+function updatePopupConnector() {
+  const popup = $('markerPopup');
+  const connector = $('popupConnector');
+  if (!popup || !connector || !state.activePopupMarkerId) {
+    connector.style.display = 'none';
+    return;
+  }
+  
+  const marker = state.markers.find(m => m.id === state.activePopupMarkerId);
+  if (!marker) {
+    connector.style.display = 'none';
+    return;
+  }
+  
+  connector.style.display = 'block';
+  const status = STATUSES.find(s => s.id === marker.status) || STATUSES[0];
+  const color = marker.color || status.color;
+  
+  const screenX = state.panX + marker.x * state.zoom;
+  const screenY = state.panY + marker.y * state.zoom;
+  const popupRect = popup.getBoundingClientRect();
+  const wrapperRect = mapWrapper.getBoundingClientRect();
+  const popupX = popupRect.left - wrapperRect.left + popupRect.width / 2;
+  const popupY = popupRect.top - wrapperRect.top + popupRect.height / 2;
+  
+  connector.setAttribute('x1', screenX);
+  connector.setAttribute('y1', screenY);
+  connector.setAttribute('x2', popupX);
+  connector.setAttribute('y2', popupY);
+  connector.setAttribute('stroke', color);
+  connector.setAttribute('opacity', '0.9');
+  connector.setAttribute('stroke-width', '3');
+}
+
 function outsidePopupClick(e) {
+  if (state.isDraggingPopup) return;
   if (!e.target.closest('.marker-popup') && !e.target.closest('.marker')) {
     closePopup();
   }
@@ -2646,6 +3234,8 @@ function outsidePopupClick(e) {
 function closePopup() {
   const popup = $('markerPopup');
   if (popup) popup.remove();
+  state.activePopupMarkerId = null;
+  updatePopupConnector();
   document.removeEventListener('mousedown', outsidePopupClick);
 }
 
@@ -2671,23 +3261,31 @@ function openModal(marker = null) {
     $('modalTitle').textContent = 'EDITAR MARCADOR';
     $('modalSubtitle').textContent = 'Modifica los detalles del marcador';
     $('nameInput').value = marker.name;
-    $('descInput').value = marker.description || '';
+    $('ownerInput').value = marker.owner || 'Nicolle Santos';
+    $('descInput').innerHTML = marker.description || '';
     state.selectedStatus = marker.status || 'stationary';
     state.selectedColor = marker.color || STATUSES.find(s => s.id === state.selectedStatus).color;
     state.currentImage = marker.image || null;
     state.currentSize = marker.size || 40;
+    state.selectedDogStates = marker.dogStates ? [...marker.dogStates] : [];
+    state.currentLocations = marker.locations ? [...marker.locations] : [];
     state.pendingPosition = { x: marker.x, y: marker.y };
     $('btnDelete').style.display = 'block';
+    $('trailGroup').style.display = 'block';
   } else {
     $('modalTitle').textContent = 'NUEVO MARCADOR';
     $('modalSubtitle').textContent = 'Configura el punto GPS';
     $('nameInput').value = '';
-    $('descInput').value = '';
+    $('ownerInput').value = 'Nicolle Santos';
+    $('descInput').innerHTML = '';
     state.selectedStatus = 'stationary';
     state.selectedColor = STATUSES.find(s => s.id === 'stationary').color;
     state.currentImage = null;
     state.currentSize = 40;
+    state.selectedDogStates = [];
+    state.currentLocations = [];
     $('btnDelete').style.display = 'none';
+    $('trailGroup').style.display = 'none';
   }
   
   $('sizeInput').value = state.currentSize;
@@ -2696,6 +3294,8 @@ function openModal(marker = null) {
   $('colorPickerText').textContent = state.selectedColor.toUpperCase();
   
   renderStatusSelector();
+  renderTagsList('location');
+  renderTagsList('dogState');
   updateImagePreview();
   
   modalBackdrop.classList.add('open');
@@ -2728,7 +3328,10 @@ function saveMarker() {
   
   const data = {
     name,
-    description: $('descInput').value.trim(),
+    owner: $('ownerInput').value.trim() || 'Nicolle Santos',
+    description: $('descInput').innerHTML,
+    dogStates: [...state.selectedDogStates],
+    locations: [...state.currentLocations],
     status: state.selectedStatus,
     color: state.selectedColor,
     image: state.currentImage,
@@ -2786,6 +3389,37 @@ function initModalEvents() {
     if (state.editingMarker) confirmDelete(state.editingMarker);
   });
   
+  $('btnClearTrail').addEventListener('click', () => {
+    if (state.editingMarker) {
+      state.editingMarker.trail = [];
+      saveMarkers();
+      renderMarkers();
+      showToast('Rastro eliminado');
+    }
+  });
+
+  $('btnBold').addEventListener('click', () => document.execCommand('bold'));
+  $('btnItalic').addEventListener('click', () => document.execCommand('italic'));
+  $('btnUnderline').addEventListener('click', () => document.execCommand('underline'));
+
+  // Locations logic
+  $('btnAddLocation').addEventListener('click', () => addTag('location'));
+  $('newLocationInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTag('location');
+    }
+  });
+
+  // Dog States logic
+  $('btnAddDogState').addEventListener('click', () => addTag('dogState'));
+  $('newDogStateInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTag('dogState');
+    }
+  });
+
   $('sizeInput').addEventListener('input', (e) => {
     $('sizeVal').textContent = e.target.value;
     state.currentSize = parseInt(e.target.value);
@@ -2859,6 +3493,125 @@ function initModalEvents() {
   });
 }
 
+// ============ GESTIÓN DE ETIQUETAS (TAGS) ============
+function addTag(type) {
+  const inputId = type === 'location' ? 'newLocationInput' : 'newDogStateInput';
+  const input = $(inputId);
+  const val = input.value.trim();
+  if (!val) return;
+
+  const globalArr = type === 'location' ? state.customLocations : state.customDogStates;
+  const selectedArr = type === 'location' ? state.currentLocations : state.selectedDogStates;
+
+  let existing = globalArr.find(t => t.text.toLowerCase() === val.toLowerCase());
+  if (existing) {
+    if (!selectedArr.includes(existing.id)) {
+      selectedArr.push(existing.id);
+    }
+  } else {
+    const newTag = {
+      id: type + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      text: val,
+      hidden: false
+    };
+    globalArr.push(newTag);
+    selectedArr.push(newTag.id);
+  }
+
+  if (type === 'location') {
+    saveCustomLocations();
+  } else {
+    saveCustomDogStates();
+  }
+  
+  renderTagsList(type);
+  input.value = '';
+}
+
+function renderTagsList(type) {
+  const containerId = type === 'location' ? 'locationsList' : 'dogStatesList';
+  const container = $(containerId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  const globalArr = type === 'location' ? state.customLocations : state.customDogStates;
+  const selectedArr = type === 'location' ? state.currentLocations : state.selectedDogStates;
+
+  const eyeSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const eyeOffSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  const editSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  const trashSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+
+  globalArr.forEach(tag => {
+    const item = document.createElement('div');
+    item.className = 'tag-list-item';
+    if (selectedArr.includes(tag.id)) item.classList.add('selected');
+    if (tag.hidden) item.classList.add('hidden-tag');
+
+    item.innerHTML = `
+      <button class="tag-name">${escapeHtml(tag.text)}</button>
+      <button class="tag-icon-btn hide" title="Ocultar/Mostrar">${tag.hidden ? eyeOffSvg : eyeSvg}</button>
+      <button class="tag-icon-btn edit" title="Editar">${editSvg}</button>
+      <button class="tag-icon-btn delete" title="Eliminar">${trashSvg}</button>
+    `;
+
+    // Click tag name to toggle selection
+    item.querySelector('.tag-name').addEventListener('click', () => {
+      const idx = selectedArr.indexOf(tag.id);
+      if (idx === -1) selectedArr.push(tag.id);
+      else selectedArr.splice(idx, 1);
+      renderTagsList(type);
+    });
+
+    // Hide/Show
+    item.querySelector('.hide').addEventListener('click', () => {
+      tag.hidden = !tag.hidden;
+      if (type === 'location') saveCustomLocations();
+      else saveCustomDogStates();
+      renderTagsList(type);
+    });
+
+    // Edit
+    item.querySelector('.edit').addEventListener('click', () => {
+      const newText = prompt('Editar etiqueta:', tag.text);
+      if (newText && newText.trim() !== '') {
+        tag.text = newText.trim();
+        if (type === 'location') saveCustomLocations();
+        else saveCustomDogStates();
+        renderTagsList(type);
+      }
+    });
+
+    // Delete
+    item.querySelector('.delete').addEventListener('click', () => {
+      if (confirm(`¿Eliminar la etiqueta "${tag.text}"?`)) {
+        // Remove from global
+        const gIdx = globalArr.findIndex(t => t.id === tag.id);
+        if (gIdx !== -1) globalArr.splice(gIdx, 1);
+        // Remove from all markers
+        state.markers.forEach(m => {
+          if (type === 'location' && m.locations) {
+            m.locations = m.locations.filter(id => id !== tag.id);
+          } else if (type === 'dogState' && m.dogStates) {
+            m.dogStates = m.dogStates.filter(id => id !== tag.id);
+          }
+        });
+        // Remove from current selection
+        const sIdx = selectedArr.indexOf(tag.id);
+        if (sIdx !== -1) selectedArr.splice(sIdx, 1);
+        
+        saveMarkers();
+        if (type === 'location') saveCustomLocations();
+        else saveCustomDogStates();
+        renderTagsList(type);
+      }
+    });
+
+    container.appendChild(item);
+  });
+}
+
 function handleImageUpload(e) {
   const file = e.target.files[0];
   if (file) processImageFile(file);
@@ -2877,15 +3630,42 @@ function processImageFile(file) {
   
   const reader = new FileReader();
   reader.onload = (ev) => {
-    resizeImage(ev.target.result, 800, 0.92).then(resized => {
-      state.currentImage = resized;
-      updateImagePreview();
-      showToast('Imagen cargada (Alta Resolución)');
-    }).catch(() => {
-      state.currentImage = ev.target.result;
-      updateImagePreview();
-      showToast('Imagen cargada');
-    });
+    const img = new Image();
+    img.onload = () => {
+      state.editImg = img;
+      state.editScale = 1;
+      state.editRotation = 0;
+      state.editFlipH = 1;
+      state.editFlipV = 1;
+      state.editOffsetX = 0;
+      state.editOffsetY = 0;
+      state.editBrightness = 100;
+      state.editContrast = 100;
+      state.editSaturation = 100;
+      
+      $('editZoom').value = 100;
+      $('zoomVal').textContent = 100;
+      $('brightness').value = 100;
+      $('brightVal').textContent = 100;
+      $('contrast').value = 100;
+      $('contrVal').textContent = 100;
+      $('saturate').value = 100;
+      $('saturVal').textContent = 100;
+
+      $('cameraModalTitle').textContent = 'EDITAR IMAGEN';
+      $('cameraModalSubtitle').textContent = 'Arrastra para mover la imagen';
+
+      $('cameraView').style.display = 'none';
+      $('editorView').style.display = 'block';
+      $('btnCapture').style.display = 'none';
+      $('btnRetake').style.display = 'none';
+      $('btnUsePhoto').style.display = 'block';
+      $('btnUsePhoto').textContent = 'Aplicar Imagen';
+
+      cameraBackdrop.classList.add('open');
+      renderEditor();
+    };
+    img.src = ev.target.result;
   };
   reader.onerror = () => {
     showToast('Error al leer el archivo', 'error');
@@ -3024,11 +3804,9 @@ function initScreenshotEvents() {
       ctx.clip();
     }
     
-    // Draw the screen portion
     ctx.drawImage(document.body, rect.left, rect.top, size, size, 0, 0, size, size);
     ctx.restore();
     
-    // Add border
     ctx.strokeStyle = '#00ff88';
     ctx.lineWidth = size * 0.03;
     ctx.beginPath();
@@ -3064,7 +3842,7 @@ async function startScreenshot(shape) {
   showToast('Arrastra para seleccionar el área');
 }
 
-// ============ CÁMARA Y EDITOR ============
+// ============ EDITOR DE IMAGEN Y CÁMARA ============
 function initCameraEvents() {
   $('btnCancelCamera').addEventListener('click', closeCamera);
   $('btnCapture').addEventListener('click', capturePhoto);
@@ -3072,21 +3850,72 @@ function initCameraEvents() {
   $('btnUsePhoto').addEventListener('click', usePhoto);
   $('btnCopyClipboard').addEventListener('click', copyToClipboard);
   
+  $('btnRotLeft').addEventListener('click', () => {
+    state.editRotation = (state.editRotation - 90) % 360;
+    renderEditor();
+  });
+  $('btnRotRight').addEventListener('click', () => {
+    state.editRotation = (state.editRotation + 90) % 360;
+    renderEditor();
+  });
+  $('btnFlipH').addEventListener('click', () => {
+    state.editFlipH *= -1;
+    renderEditor();
+  });
+  $('btnFlipV').addEventListener('click', () => {
+    state.editFlipV *= -1;
+    renderEditor();
+  });
+
+  $('editZoom').addEventListener('input', (e) => {
+    $('zoomVal').textContent = e.target.value;
+    state.editScale = parseInt(e.target.value) / 100;
+    renderEditor();
+  });
   $('brightness').addEventListener('input', (e) => {
     $('brightVal').textContent = e.target.value;
-    applyFilters();
+    state.editBrightness = parseInt(e.target.value);
+    renderEditor();
   });
   $('contrast').addEventListener('input', (e) => {
     $('contrVal').textContent = e.target.value;
-    applyFilters();
+    state.editContrast = parseInt(e.target.value);
+    renderEditor();
   });
   $('saturate').addEventListener('input', (e) => {
     $('saturVal').textContent = e.target.value;
-    applyFilters();
+    state.editSaturation = parseInt(e.target.value);
+    renderEditor();
   });
   
   cameraBackdrop.addEventListener('click', (e) => {
     if (e.target === cameraBackdrop) closeCamera();
+  });
+
+  // Arrastrar imagen en el editor
+  const canvas = $('editorCanvas');
+  canvas.addEventListener('mousedown', (e) => {
+    if (!state.editImg) return;
+    state.isDraggingEdit = true;
+    state.editDragStart = {
+      x: e.clientX,
+      y: e.clientY,
+      offsetX: state.editOffsetX,
+      offsetY: state.editOffsetY
+    };
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (state.isDraggingEdit) {
+      state.editOffsetX = state.editDragStart.offsetX + (e.clientX - state.editDragStart.x);
+      state.editOffsetY = state.editDragStart.offsetY + (e.clientY - state.editDragStart.y);
+      renderEditor();
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    state.isDraggingEdit = false;
   });
 }
 
@@ -3111,12 +3940,12 @@ function closeCamera() {
     state.cameraStream.getTracks().forEach(track => track.stop());
     state.cameraStream = null;
   }
-  state.capturedImage = null;
+  state.editImg = null;
 }
 
 function capturePhoto() {
   const video = $('cameraVideo');
-  const canvas = $('editorCanvas');
+  const canvas = document.createElement('canvas');
   const w = video.videoWidth;
   const h = video.videoHeight;
   canvas.width = w;
@@ -3128,34 +3957,79 @@ function capturePhoto() {
   ctx.drawImage(video, 0, 0, w, h);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   
-  state.capturedImage = new Image();
-  state.capturedImage.onload = () => {
-    applyFilters();
+  state.editImg = new Image();
+  state.editImg.onload = () => {
+    state.editScale = 1;
+    state.editRotation = 0;
+    state.editFlipH = 1;
+    state.editFlipV = 1;
+    state.editOffsetX = 0;
+    state.editOffsetY = 0;
+    state.editBrightness = 100;
+    state.editContrast = 100;
+    state.editSaturation = 100;
+
+    $('editZoom').value = 100;
+    $('zoomVal').textContent = 100;
+    $('brightness').value = 100;
+    $('brightVal').textContent = 100;
+    $('contrast').value = 100;
+    $('contrVal').textContent = 100;
+    $('saturate').value = 100;
+    $('saturVal').textContent = 100;
+
+    $('cameraModalTitle').textContent = 'EDITAR FOTO';
+    $('cameraModalSubtitle').textContent = 'Arrastra para mover la foto';
+
     $('cameraView').style.display = 'none';
     $('editorView').style.display = 'block';
     $('btnCapture').style.display = 'none';
+    $('btnRetake').style.display = 'inline-flex';
     $('btnUsePhoto').style.display = 'block';
-    
+    $('btnUsePhoto').textContent = 'Usar en Marcador';
+
     if (state.cameraStream) {
       state.cameraStream.getTracks().forEach(track => track.stop());
       state.cameraStream = null;
     }
+    renderEditor();
   };
-  state.capturedImage.src = canvas.toDataURL('image/png');
+  state.editImg.src = canvas.toDataURL('image/png');
 }
 
-function applyFilters() {
-  if (!state.capturedImage) return;
-  
+function renderEditor() {
   const canvas = $('editorCanvas');
   const ctx = canvas.getContext('2d');
-  const b = $('brightness').value;
-  const c = $('contrast').value;
-  const s = $('saturate').value;
+  const w = canvas.width;
+  const h = canvas.height;
   
-  ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(state.capturedImage, 0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, w, h);
+
+  if (!state.editImg) {
+    ctx.restore();
+    return;
+  }
+
+  ctx.filter = `brightness(${state.editBrightness}%) contrast(${state.editContrast}%) saturate(${state.editSaturation}%)`;
+  
+  ctx.translate(w / 2 + state.editOffsetX, h / 2 + state.editOffsetY);
+  ctx.rotate(state.editRotation * Math.PI / 180);
+  ctx.scale(state.editFlipH * state.editScale, state.editFlipV * state.editScale);
+
+  const imgW = state.editImg.naturalWidth;
+  const imgH = state.editImg.naturalHeight;
+  const scale = Math.max(w / imgW, h / imgH);
+  
+  ctx.drawImage(state.editImg, -imgW * scale / 2, -imgH * scale / 2, imgW * scale, imgH * scale);
+  ctx.restore();
+
+  const prevImg = $('prevImg');
+  if (prevImg) {
+    prevImg.style.backgroundImage = `url(${canvas.toDataURL('image/jpeg', 0.5)})`;
+  }
 }
 
 function retakePhoto() {
@@ -3170,7 +4044,7 @@ function usePhoto() {
     state.currentImage = resized;
     updateImagePreview();
     closeCamera();
-    showToast('Foto capturada y aplicada (Alta Resolución)');
+    showToast('Imagen aplicada (Alta Resolución)');
   });
 }
 
@@ -3246,7 +4120,7 @@ function renderStatusSelector() {
     `;
     opt.addEventListener('click', () => {
       state.selectedStatus = stat.id;
-      state.selectedColor = stat.color; // Auto-update color when status changes
+      state.selectedColor = stat.color;
       $('colorPicker').value = stat.color;
       $('colorPickerText').textContent = stat.color.toUpperCase();
       renderStatusSelector();
@@ -3264,8 +4138,13 @@ function renderMarkerList() {
     if (state.filterStatus !== 'all' && marker.status !== state.filterStatus) return false;
     if (state.searchQuery) {
       const q = state.searchQuery.toLowerCase();
+      const locTexts = getTagTexts(marker.locations || [], 'location').join(' ').toLowerCase();
+      const dogTexts = getTagTexts(marker.dogStates || [], 'dogState').join(' ').toLowerCase();
       if (!marker.name.toLowerCase().includes(q) && 
-          !(marker.description || '').toLowerCase().includes(q)) return false;
+          !(marker.description || '').toLowerCase().includes(q) &&
+          !(marker.owner || '').toLowerCase().includes(q) &&
+          !locTexts.includes(q) &&
+          !dogTexts.includes(q)) return false;
     }
     return true;
   });
@@ -3306,6 +4185,20 @@ function renderMarkerList() {
           ${status.label}
         </div>
       </div>
+      <div class="marker-item-actions">
+        <button class="marker-action-btn edit" title="Editar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+        <button class="marker-action-btn delete" title="Eliminar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+        </button>
+      </div>
     `;
     
     item.addEventListener('click', () => {
@@ -3314,6 +4207,16 @@ function renderMarkerList() {
       renderMarkerList();
       centerOnMarker(marker);
       showMarkerPopup(marker);
+    });
+
+    item.querySelector('.marker-action-btn.edit').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openModal(marker);
+    });
+
+    item.querySelector('.marker-action-btn.delete').addEventListener('click', (e) => {
+      e.stopPropagation();
+      confirmDelete(marker);
     });
     
     list.appendChild(item);
@@ -3372,10 +4275,27 @@ function exportMarkers() {
     return;
   }
   
+  // Resolve tag IDs to text for export
+  const exportData = state.markers.map(m => {
+    return {
+      ...m,
+      locations: (m.locations || []).map(id => {
+        const tag = state.customLocations.find(t => t.id === id);
+        return tag ? tag.text : '';
+      }).filter(t => t !== ''),
+      dogStates: (m.dogStates || []).map(id => {
+        const tag = state.customDogStates.find(t => t.id === id);
+        return tag ? tag.text : '';
+      }).filter(t => t !== '')
+    }
+  });
+
   const data = {
     version: 1,
     exported: new Date().toISOString(),
-    markers: state.markers,
+    markers: exportData,
+    customLocations: state.customLocations.map(t => t.text),
+    customDogStates: state.customDogStates.map(t => t.text)
   };
   
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -3408,11 +4328,43 @@ function importMarkers(e) {
             if (!m.size) m.size = 40;
             if (!m.status) m.status = 'stationary';
             if (!m.color) m.color = '#ffd60a';
+            if (!m.owner) m.owner = 'Nicolle Santos';
+            if (!m.locations) m.locations = [];
+            if (!m.dogStates) m.dogStates = [];
+            
+            // Import custom tags if provided
+            if (data.customLocations || data.customDogStates) {
+               // handled below globally
+            }
+
             state.markers.push(m);
             count++;
           }
         }
       });
+
+      // Import global tags if they exist in the file
+      if (Array.isArray(data.customLocations)) {
+        data.customLocations.forEach(text => {
+          if (!state.customLocations.find(t => t.text === text)) {
+            state.customLocations.push({ id: 'loc_' + Date.now() + Math.random(), text, hidden: false });
+          }
+        });
+      }
+      if (Array.isArray(data.customDogStates)) {
+        data.customDogStates.forEach(text => {
+          if (!state.customDogStates.find(t => t.text === text)) {
+            state.customDogStates.push({ id: 'dog_' + Date.now() + Math.random(), text, hidden: false });
+          }
+        });
+      }
+
+      saveCustomLocations();
+      saveCustomDogStates();
+      // Migrate tags again to resolve strings to IDs for imported markers
+      migrateTags();
+      renderTagsList('location');
+      renderTagsList('dogState');
       
       saveMarkers();
       renderMarkers();
