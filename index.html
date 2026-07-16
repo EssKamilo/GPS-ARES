@@ -40,61 +40,36 @@
   }
   
   .bg-atmosphere {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
+    position: fixed; inset: 0; z-index: -2;
     background: 
       radial-gradient(ellipse 80% 60% at 20% 0%, rgba(139, 26, 138, 0.35) 0%, transparent 60%),
       radial-gradient(ellipse 60% 40% at 90% 100%, rgba(255, 94, 31, 0.25) 0%, transparent 60%),
       radial-gradient(ellipse 50% 40% at 10% 100%, rgba(255, 45, 111, 0.18) 0%, transparent 60%),
       linear-gradient(180deg, #07050d 0%, #120819 100%);
   }
-  
   .bg-noise {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.05;
-    pointer-events: none;
+    position: fixed; inset: 0; z-index: -1; opacity: 0.05; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  
   .bg-scanlines {
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    pointer-events: none;
+    position: fixed; inset: 0; z-index: 999; pointer-events: none;
     background: repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
   }
   
   header.app-header {
-    position: relative;
-    z-index: 100;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
+    position: relative; z-index: 100; height: 72px; display: flex; align-items: center; padding: 0 24px;
     background: linear-gradient(90deg, rgba(7, 5, 13, 0.95), rgba(18, 8, 25, 0.85), rgba(7, 5, 13, 0.95));
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
   }
-  
   .logo-mark {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: white;
-    box-shadow: 0 0 20px rgba(255, 94, 31, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
-    position: relative; flex-shrink: 0;
+    width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
+    display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: white;
+    box-shadow: 0 0 20px rgba(255, 94, 31, 0.4), inset 0 1px 0 rgba(255,255,255,0.3); position: relative; flex-shrink: 0;
   }
-  
   .logo-mark::after {
     content: ''; position: absolute; inset: -3px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
-    z-index: -1; filter: blur(10px); opacity: 0.5;
+    background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink)); z-index: -1; filter: blur(10px); opacity: 0.5;
   }
-  
   .title-block { margin-left: 16px; display: flex; align-items: baseline; gap: 14px; }
   .title-main {
     font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1;
@@ -115,7 +90,6 @@
     width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border);
     backdrop-filter: blur(20px); display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
   }
-  
   .sidebar-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
   .section-title {
     font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.25em;
@@ -1069,16 +1043,22 @@ async function init() {
     updateMapTransform();
   });
   
-  try {
-    const customMap = await getCustomMap();
-    if (customMap) {
-      setMapImage(customMap.dataUrl, customMap.width, customMap.height);
-      showToast('Mapa personalizado cargado');
-    } else {
+  // Los visitantes no tienen mapas personalizados en IndexedDB, siempre cargan el por defecto.
+  // Los admins intentan cargar su mapa personalizado.
+  if (isAdmin) {
+    try {
+      const customMap = await getCustomMap();
+      if (customMap) {
+        setMapImage(customMap.dataUrl, customMap.width, customMap.height);
+        showToast('Mapa personalizado cargado');
+      } else {
+        loadDefaultMap();
+      }
+    } catch (e) {
+      console.error('Error loading custom map', e);
       loadDefaultMap();
     }
-  } catch (e) {
-    console.error('Error loading custom map', e);
+  } else {
     loadDefaultMap();
   }
 }
@@ -1106,12 +1086,10 @@ function initFirebaseListeners() {
     renderMarkerList();
     updateStats();
     
-    $('mapLoading').style.display = 'none';
-    
-    if (isAdmin) {
-      setTimeout(() => {
-        showToast('Modo Admin activado. Puedes editar.', 'success');
-      }, 1000);
+  }, (error) => {
+    console.error("Firebase error: ", error);
+    if (!isAdmin) {
+      showToast('Error de permisos en Firebase. Revisa las reglas.', 'error');
     }
   });
 }
@@ -1162,7 +1140,6 @@ function migrateTags() {
       changed = true;
     }
   });
-  // Do not save here to avoid loops, will save on next explicit action
 }
 
 // ============ INDEXED DB PARA MAPA ============
@@ -1249,6 +1226,13 @@ function setMapImage(url, w, h) {
     };
     mapImage.src = url;
     mapImage.style.display = 'block';
+    
+    // Temporizador de seguridad por si la imagen tarda demasiado
+    setTimeout(() => {
+      if ($('mapLoading').style.display !== 'none') {
+        showToast('El mapa está tardando en cargar (10MB+). Espera...', 'success');
+      }
+    }, 5000);
   } else {
     mapImage.style.display = 'none';
     $('mapLoading').style.display = 'none';
@@ -1442,7 +1426,7 @@ function handleMouseDown(e) {
       const rect = popup.getBoundingClientRect();
       const isResizeZone = (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20);
       if (!isResizeZone) {
-        if (!isAdmin) return; // Prevent dragging popup for visitors
+        if (!isAdmin) return;
         state.isDraggingPopup = true;
         state.popupDragStart = {
           mouseX: e.clientX,
